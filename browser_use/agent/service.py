@@ -72,6 +72,7 @@ from browser_use.utils import (
 	time_execution_async,
 	time_execution_sync,
 )
+from browser_use.agent.action_cache import cache_executed_actions
 
 logger = logging.getLogger(__name__)
 
@@ -1088,6 +1089,21 @@ class Agent(Generic[Context, AgentStructuredOutput]):
 		)
 
 		self.history.add_item(history_item)
+
+		if model_output:
+			try:
+				cache_executed_actions(
+					agent_id=str(self.id),
+					step=self.state.n_steps,
+					url_before=browser_state_summary.url,
+					actions=model_output.action,
+					interacted_elements=interacted_elements,
+					results=result,
+				)
+			except Exception as exc:
+				self.logger.warning(
+					f"Failed to cache executed browser actions: {exc}"
+				)
 
 	def _remove_think_tags(self, text: str) -> str:
 		THINK_TAGS = re.compile(r'<think>.*?</think>', re.DOTALL)
