@@ -32,6 +32,7 @@ from pydantic import BaseModel, ValidationError
 from uuid_extensions import uuid7str
 
 from browser_use import Browser, BrowserProfile, BrowserSession
+from browser_use.agent.action_cache import cache_executed_actions
 from browser_use.agent.judge import construct_judge_messages
 
 # Lazy import for gif to avoid heavy agent.views import at startup
@@ -72,7 +73,6 @@ from browser_use.utils import (
 	time_execution_async,
 	time_execution_sync,
 )
-from browser_use.agent.action_cache import cache_executed_actions
 
 logger = logging.getLogger(__name__)
 
